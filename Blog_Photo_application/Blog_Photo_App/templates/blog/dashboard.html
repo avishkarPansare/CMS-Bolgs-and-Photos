@@ -1,0 +1,126 @@
+{% extends 'blog/base.html' %} {% load static %} {% block msg %}
+<!--{% if messages
+%} Hello-->
+{% for message in messages %}
+<head>
+  <style>
+    .image-thumbail {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .list-group-item a {
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+
+  <script type="text/javascript">
+    function checkbox() {
+      alert("Delete !!!!!!!!!!!");
+    }
+  </script>
+</head>
+<div
+  {%
+  if
+  message.tags
+  %}
+  class="alert alert-{{message.tags}} alert-dismissible fade show"
+  {%
+  endif
+  %}
+>
+  <strong>{{message}} </strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endfor %} {% endblock msg %}  {% block content %}
+<div class="col-sm-10">
+  <h3 class="text-white my-5">Dashboard Page</h3>
+  <h5>Hello , {{full_name}}</h5>
+  <h1>
+  <a href="{% url 'addphoto' %}" class="btn btn-primary">&nbsp; &nbsp;&nbsp; &nbsp;Add Photo&nbsp; &nbsp;&nbsp; &nbsp;</a>&nbsp; &nbsp;
+  <a href="{% url 'addBlog' %}" class="btn btn-info">&nbsp; &nbsp;&nbsp; &nbsp;Add Blog &nbsp; &nbsp;&nbsp; &nbsp;</a>&nbsp; &nbsp;
+  <a href="{% url 'addphoto' %}" class="btn btn-success">Add Photo</a>&nbsp; &nbsp;
+</h1>
+  <h4 class="text-center alert alert-info mt-3">Show Post Information</h4>
+  {% if posts %}
+  <table class="table table-hover bg-white">
+    <thead>
+      <tr class="text-center">
+        <th scope="col" style="width: 10%">Title</th>
+        <th scope="col" style="width: 5%">Category</th>
+        <th scope="col" style="width: 10%">Oneline</th>
+        <th scope="col" style="width: 55%">Description</th>
+        <th scope="col" style="width: 10%">Date</th>
+        <th scope="col" style="width: 20%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+      <tr>
+        <td>{{post.Title}}</td>
+        <td>{{post.Category}}</td>
+        <td>{{post.Oneline}}</td>
+        <td>{{post.Content}}</td>
+        <td>{{post.Date}}</td>
+        <td class="text-center">
+          <a
+            href="{% url 'updatepost' post.id %}"
+            class="btn btn-warning btn-sm"
+            >Edit</a
+          >
+          <form
+            action="{% url 'deletepost' post.id %}"
+            method="post"
+            class="d-inline"
+          >
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger btn-sm" value="Delete" />
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <h4 class="text-center alert alert-warning">No Blogs</h4>
+  {% endif %}
+  <h4 class="text-center alert alert-info mt-3">Show Photo Information</h4>
+  <div class="row">
+    {% if photos %} {% for img in photos %}
+    <div class="col-md-4">
+      <div class="card my-2">
+        <img
+          class="image-thumbail"
+          src="{{img.photo.url}}"
+          alt="Card image cap"
+        />
+
+        <div class="card-body">
+          <small>Category: {{photo.category.name}}</small>
+        </div>
+        <a
+          href="{% url 'photo' img.id %}"
+          class="btn btn-outline-dark btn-sm m-1"
+          >View</a
+        >
+
+        <a
+          class="btn btn-sm btn-danger"
+          onClick="checkbox()"
+          href="{% url 'delete_order' img.id %}"
+          >Delete</a
+        >
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <h4 class="text-center alert alert-warning">No Blogs</h4>
+  {% endif %}
+</div>
+{% endblock content %}

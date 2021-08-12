@@ -1,0 +1,54 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="col-sm-10">
+ <!--<h3 class="text-white my-5">Home Page</h3>-->
+ <h4 class="text-center alert alert-info mt-3">Show Blog Information</h4>
+  {% for post in posts %}
+    <div class="jumbotron jumbotron-fluid jumbo-color">
+      <div class="container">
+        <h1 class="display-4 font-weight-bold">{{post.Title}}</h1>
+		<h4>Category : {{post.Category.name}}</h4>
+        <p class="card-text text-muted h6"> {{post.Time}}| {{ post.Date}} </p>
+        <p class="lead">{{post.Content}}</p>
+        
+      </div>
+    </div>
+  {% endfor %}
+  
+  
+  
+  
+  <h4 class="text-center alert alert-info mt-3">Show Photo Information</h4>
+  <div class="row">
+    {% for img in Pic %}
+    <div class="col-md-4">
+      <div class="card my-2" color="red">
+        <img
+          class="image-thumbail"
+          src="{{img.photo.url}}"
+          alt="Card image cap"
+        />
+
+        <div class="card-body">
+		<font color="black">
+          <small>Category: {{img.category.name}}</small><br >
+		  <small>Description: {{img.description}}</small><br>
+		  <small>{{img.Time}}| {{ img.Date}}</small></font>
+        </div>
+        <a
+          href="{% url 'photo' img.id %}"
+          class="btn btn-outline-dark btn-sm m-1"
+          >View</a
+        >
+
+      </div>
+    </div>
+    {% empty %}
+    <h3 class="text-center alert alert-warning">No photos...</h3>
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
